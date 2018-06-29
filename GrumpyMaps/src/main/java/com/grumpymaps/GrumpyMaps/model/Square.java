@@ -21,7 +21,8 @@ public class Square implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private int mapSquareId;
-    private String squareScale;
+    private String mapCoordinate;
+    private String squareHeightWidth;
     private int squareSize;
     private boolean obstructed;
     private int mapHeightWidth;
@@ -67,19 +68,35 @@ public class Square implements Serializable{
 	}
 
 	/**
-	* Returns value of squareScale
+	* Returns value of mapCoordinate
 	* @return
 	*/
-	public String getSquareScale() {
-		return squareScale;
+	public String getMapCoordinate() {
+		return mapCoordinate;
 	}
 
 	/**
-	* Sets new value of squareScale
+	* Sets new value of mapCoordinate
 	* @param
 	*/
-	public void setSquareScale(String squareScale) {
-		this.squareScale = squareScale;
+	public void setMapCoordinate(String mapCoordinate) {
+		this.mapCoordinate = mapCoordinate;
+	}
+
+	/**
+	* Returns value of squareHeightWidth
+	* @return
+	*/
+	public String getSquareHeightWidth() {
+		return squareHeightWidth;
+	}
+
+	/**
+	* Sets new value of squareHeightWidth
+	* @param
+	*/
+	public void setSquareHeightWidth(String squareHeightWidth) {
+		this.squareHeightWidth = squareHeightWidth;
 	}
 
 	/**

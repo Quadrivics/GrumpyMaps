@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { MapShareService } from '../map-share.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Square } from '../domain/square';
@@ -15,6 +15,9 @@ export class SquareDetailComponent implements OnInit {
   square: Square;
   playerIdCreator: number = 1;
   movementMode: boolean = false;
+  @Output() moveModeEvent = new EventEmitter<boolean>();
+  @Output() setRangeSquaresEvent = new EventEmitter<number[]>();
+  @Output() setPlayerToMoveEvent = new EventEmitter<Player>();
   previousPlayer: Player;
   movable: boolean = false;
   playerNameColor = {};
@@ -51,9 +54,10 @@ export class SquareDetailComponent implements OnInit {
 
   showRange(player:Player){
       var allRangeSquares = player.getMoveRange();
-      console.log(allRangeSquares);
+      //console.log(allRangeSquares);
       player.isSelected = true;
-      this.mapShareService.setAllRangeSquares(allRangeSquares);
+      this.setRangeSquaresEvent.emit(allRangeSquares);
+
       this.movable = true;
   }
 
@@ -74,8 +78,8 @@ export class SquareDetailComponent implements OnInit {
               if(this.square.players[i].isSelected) {
                   selectedPlayer = this.square.players[i];
                   this.movementMode = true;
-                  this.mapShareService.setMovementMode(true);
-                  this.mapShareService.setPlayerToMove(selectedPlayer);
+                  this.moveModeEvent.emit(this.movementMode);
+                  this.setPlayerToMoveEvent.emit(selectedPlayer);
                   this.square.removePhysical(selectedPlayer.id);
               }
           }

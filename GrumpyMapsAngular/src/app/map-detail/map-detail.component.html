@@ -1,8 +1,14 @@
-<br />
+
 <div class="mapcontainer" [ngStyle]="mapBackground" data-toggle="collapse" data-target="#derp">
-  <div class="square" id="square">
-    <app-square *ngFor="let square of dndMap.squares" [squareScale]=square.squareScale [square]=square></app-square>
-  </div>
+    <div class="rowsContainer">
+        <div *ngFor="let j of rowArray" id="row_{{j}}" class="row" [ngStyle]="rowStyles">
+            <div class="square">
+                <app-square *ngFor="let square of dndMap.squares | slice:(j-1)*heightWidth:j*heightWidth; index as i" [squareHeightWidth]=square.squareHeightWidth [square]=square [squareIndex]=i [_rowIndex]=j [obstructionMode]=obstructionMode [inRangeSquares]=rangeSquares [movementMode]=movementMode [playerToMove]=playerToMove [_squareBorderStyles]=squareBorderStyle (moveModeEvent)="receiveMoveMode($event)" (setRangeSquaresEvent)="receiveRangeSquares($event)" ></app-square>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 <h3><img class="img-fuild" src="assets/dnd.png"> Map Tool V1.0</h3>
@@ -24,11 +30,11 @@ Hide square details
     <br>
     <button (click)="uploadImage()" class="btn btn-success">Select image</button><br><br>
     <label class="center-block"><b>Height/Width:</b>
-      <input class="form-control" formControlName="heightwidth" type="number" min="5" max="25" (change)="setMapScale()" (click)="setMapScale()">
+      <input class="form-control" formControlName="heightwidth" type="number" min="5" max="24" (change)="setMapScale()" (click)="setMapScale()">
     </label>
     <br>
     <label class="center-block"><b>In-game square size (ft):</b>
-      <input class="form-control" formControlName="feet" type="number" (change)="setMapScale()"  (click)="setMapScale()">
+      <input class="form-control" formControlName="feet" type="number" min="1" max="25" (change)="setMapScale()"  (click)="setMapScale()">
       </label>
     <br>
     <label class="center-block">Obstruct squares:
@@ -39,7 +45,7 @@ Hide square details
 </label>
 
     <br><br>
-    <button (click)="saveMap()" class="btn btn-success">Save map</button>
+    <button (click)="loadMap()" class="btn btn-success" data-toggle="modal" data-target="#saveModal">Save map</button>
     <button (click)="loadMap()" class="btn btn-success" data-toggle="modal" data-target="#loadModal">Load map</button>
   </div>
 </form>
@@ -51,10 +57,43 @@ Hide square details
     <span aria-hidden="true">&times;</span>
   </button>
   </div>
-  <app-square-detail></app-square-detail>
+  <app-square-detail (moveModeEvent)="receiveMoveMode($event)" (setRangeSquaresEvent)="receiveRangeSquares($event)" (setPlayerToMoveEvent)="receivePlayerToMove($event)"></app-square-detail>
 </div>
 
-<!-- Modal -->
+<!-- Save Modal -->
+<div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="loadModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Save map as:</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="saveForm">
+                    <label class="center-block"><b>Map name:</b>
+                        <input class="form-control" formControlName="mapName" (change)="selectSaveMap(0)">
+                    </label>
+                </form>
+                <div *ngIf="mapsLoaded==true">
+                    <label class="center-block"><b>Your maps:</b></label><br>
+                    <span *ngFor="let name of allLoadedMapNames" [style.color]="" (click)="selectSaveMap(name)">
+                        {{name}}<br />
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="saveMap()" data-dismiss="modal">Save map</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load Modal -->
 <div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="loadModalLabel" aria-hidden="true">
 
     <div class="modal-dialog" role="document">
@@ -68,11 +107,12 @@ Hide square details
             </div>
             <div class="modal-body">
                 <div *ngIf="mapsLoaded==true">
-                    <span *ngFor="let id of allLoadedMapIds" [style.color]="" (click)="selectMap(id)">
-                        {{id}}<br />
+                    <label class="center-block"><b>Your maps:</b></label><br>
+                    <span *ngFor="let name of allLoadedMapNames" [style.color]="" (click)="selectLoadMap(name)">
+                        {{name}}<br />
                     </span>
                     <br />
-                    <span><B>You selected map: {{selectedMap}}</B></span>
+                    <span><B>You selected map: {{selectedLoadMapidname}}</B></span>
                 </div>
             </div>
             <div class="modal-footer">

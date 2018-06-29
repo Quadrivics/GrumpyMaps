@@ -3,7 +3,8 @@ import { Player } from './player';
 export class Square {
     id:number;
   mapSquareId: number;
-  squareScale: string;
+  mapCoordinate:string;
+  squareHeightWidth: string;
   squareSize: number;
   mapHeightWidth: number;
   obstructed: boolean = false;
@@ -12,10 +13,10 @@ export class Square {
   players: Player[] = new Array();
   numberofPlayers:number;
 
-  constructor(id:number, mapSquareId: number, squareSize: number, squareScale: string, heightWidth: number) {
+  constructor(id:number, mapSquareId: number, squareSize: number, squareHeightWidth: string, heightWidth: number) {
     this.id = id;
     this.mapSquareId = mapSquareId;
-    this.squareScale = squareScale;
+    this.squareHeightWidth = squareHeightWidth;
     this.squareSize = squareSize;
     this.mapHeightWidth = heightWidth;
   }

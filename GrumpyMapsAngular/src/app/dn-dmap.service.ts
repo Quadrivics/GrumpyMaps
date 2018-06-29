@@ -33,15 +33,18 @@ export class DnDMapService {
 
 
 findAllMaps(): Observable<DnDMap[]>  {
+    console.log("getting all maps");
     return <Observable<DnDMap[]>>this.http.get('http://localhost:8080/dndmap');
 }
 
 
 getMapSquares(mapId:number): Observable<Square[]>  {
+    console.log("getting all squares from map " + mapId);
     return <Observable<Square[]>>this.http.get('http://localhost:8080/square/'+mapId);
 }
 
 findPlayerByRealSquareId(sqId:number): Observable<Player>  {
+    console.log("getting a player");
     return <Observable<Player>>this.http.get('http://localhost:8080/player/'+sqId);
 }
 

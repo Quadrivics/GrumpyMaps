@@ -19,6 +19,7 @@ public class DndMap {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private String name;
     private int heightWidth;
     private int numberOfSquares;
 
@@ -40,6 +41,22 @@ public class DndMap {
 	*/
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	/**
+	* Returns value of name
+	* @return
+	*/
+	public String getName() {
+		return name;
+	}
+
+	/**
+	* Sets new value of name
+	* @param
+	*/
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
